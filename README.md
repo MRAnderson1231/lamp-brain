@@ -18,7 +18,25 @@ webcam ──▶ lamp_brain.py (FastVLM on MLX) ──▶ emotion.txt ──▶ 
 | sad | droops, sighs, shakes its head slowly, light turns dim and cold |
 | surprised | flinches back with a flash, then settles |
 
-## Run it
+## The Mac app
+
+`app/` is a native macOS app that does the whole thing in one window: the lamp
+on the left (SceneKit, loading the Blender model as USDZ and the clips as JSON),
+your camera on the right, and FastVLM reading your expression on MLX Swift.
+Click a mood to preview it without a camera.
+
+It starts from Apple's FastVLM sample app (`app/FastVLM`, `app/Video`, see
+`app/LICENSE-APPLE-SAMPLE`); everything under `app/FastVLM App` is new.
+
+```bash
+cd app
+./get_pretrained_mlx_model.sh --model 1.5b --dest FastVLM/model   # weights are not in this repo
+open FastVLM.xcodeproj                                            # set your team, then Run
+```
+
+Measured on an M4 Pro with FastVLM-1.5B int8: about 410 ms per reading.
+
+## Run the Blender version
 
 Needs an Apple Silicon Mac, [uv](https://docs.astral.sh/uv/) and Blender 5.x.
 

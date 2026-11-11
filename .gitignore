@@ -2,3 +2,6 @@
 models/
 __pycache__/
 *.blend1
+app/build/
+app/FastVLM/model/
+xcuserdata/
