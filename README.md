@@ -20,6 +20,10 @@ webcam ──▶ lamp_brain.py (FastVLM on MLX) ──▶ emotion.txt ──▶ 
 
 ## The Mac app
 
+![The Mac app](app.png)
+
+*The camera panel is blanked out in this screenshot.*
+
 `app/` is a native macOS app that does the whole thing in one window: the lamp
 on the left (SceneKit, loading the Blender model as USDZ and the clips as JSON),
 your camera on the right, and FastVLM reading your expression on MLX Swift.
