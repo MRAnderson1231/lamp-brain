@@ -1,0 +1,9 @@
+[project]
+name = "lamp-brain"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "mlx-vlm>=0.7.12",
+    "opencv-python>=5.0.0.93",
+    "pillow>=13.0.0",
+]
