@@ -109,6 +109,15 @@ struct ContentView: View {
 
             Spacer(minLength: 20)
 
+            if !app.heard.isEmpty {
+                Text("\u{201C}\(app.heard)\u{201D}")
+                    .font(.system(size: 12, weight: .regular).italic())
+                    .foregroundStyle(Palette.ink.opacity(0.5))
+                    .lineLimit(2)
+                    .padding(.bottom, 8)
+                    .help("What the model said about the last frame")
+            }
+
             footer
         }
     }

@@ -15,7 +15,7 @@ final class EmotionReader {
     // Kept short: small models stop following long instructions.
     private let question =
         "What is the facial expression of the person? Answer with one word: neutral, happy, laughing, sad, or surprised."
-    private let maxTokens = 6
+    private let maxTokens = 28
     private var container: ModelContainer?
 
     init() {
@@ -52,7 +52,12 @@ final class EmotionReader {
                 return try MLXLMCommon.generate(
                     input: prepared, parameters: GenerateParameters(temperature: 0.0), context: context
                 ) { tokens in
-                    tokens.count >= limit ? .stop : .more
+                    // The answer comes as a sentence; stop as soon as a mood word shows up.
+                    if tokens.count >= limit { return .stop }
+                    if tokens.count >= 2, Emotion.parse(context.tokenizer.decode(tokens: tokens)) != nil {
+                        return .stop
+                    }
+                    return .more
                 }
             }
             return (result.output, Date().timeIntervalSince(start))

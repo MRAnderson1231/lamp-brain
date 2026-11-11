@@ -41,18 +41,13 @@ SYNONYMS = {
 
 
 def parse_label(text):
-    t = text.strip().lower()
-    for label in LABELS:
-        if t.startswith(label):
-            return label
-    # "unhappy" contains "happy", so check synonyms before a loose label search
-    for stem, label in SYNONYMS.items():
-        if stem in t:
-            return label
-    for label in LABELS:
-        if label in t:
-            return label
-    return None
+    """The model usually answers in a sentence ("...can be described as surprised"),
+    so take whichever mood word appears first."""
+    t = text.lower()
+    hits = [(t.find(stem), label) for stem, label in SYNONYMS.items() if stem in t]
+    # "unhappy" contains "happy": skip a label when its negation is present
+    hits += [(t.find(label), label) for label in LABELS if label in t and "un" + label not in t]
+    return min(hits)[1] if hits else None
 
 
 class EmotionReader:
@@ -67,7 +62,7 @@ class EmotionReader:
         """image: PIL.Image. Returns (label or None, raw text, seconds)."""
         t = time.perf_counter()
         out = generate(self.model, self.processor, self.prompt, image=[image],
-                       max_tokens=6, temperature=0.0, verbose=False)
+                       max_tokens=28, temperature=0.0, verbose=False)
         dt = time.perf_counter() - t
         text = getattr(out, "text", out)
         return parse_label(text), text.strip(), dt
@@ -153,7 +148,7 @@ def main():
             if stable != last_written:
                 write_emotion(stable)
                 last_written = stable
-            print("%-10s -> %-9s | lamp: %-9s | %4.0f ms" % (raw[:10], label or "?", stable, dt * 1000), flush=True)
+            print("%-9s | lamp: %-9s | %4.0f ms | %s" % (label or "?", stable, dt * 1000, raw[:70]), flush=True)
             if args.show:
                 cv2.putText(frame, "%s  %.0f ms" % (stable, dt * 1000), (20, 50),
                             cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 255), 3)

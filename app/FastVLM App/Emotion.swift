@@ -39,12 +39,20 @@ enum Emotion: String, CaseIterable, Identifiable {
     ]
 
     /// Turn the model's free text into a label, or nil if it said something else.
+    ///
+    /// The model usually answers in a sentence ("The facial expression of the person can be
+    /// described as surprised…"), so this takes whichever mood word appears first.
     static func parse(_ text: String) -> Emotion? {
-        let t = text.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        if let exact = allCases.first(where: { t.hasPrefix($0.rawValue) }) { return exact }
-        // "unhappy" contains "happy", so synonyms go before the loose search
-        if let match = synonyms.first(where: { t.contains($0.stem) }) { return match.emotion }
-        return allCases.first(where: { t.contains($0.rawValue) })
+        let t = text.lowercased()
+        var best: (index: String.Index, emotion: Emotion)?
+        func consider(_ word: String, _ emotion: Emotion) {
+            guard let range = t.range(of: word) else { return }
+            if best == nil || range.lowerBound < best!.index { best = (range.lowerBound, emotion) }
+        }
+        // synonyms first, so "unhappy" wins over the "happy" inside it at the same position
+        for (stem, emotion) in synonyms { consider(stem, emotion) }
+        for emotion in allCases where !t.contains("un" + emotion.rawValue) { consider(emotion.rawValue, emotion) }
+        return best?.emotion
     }
 }
 
