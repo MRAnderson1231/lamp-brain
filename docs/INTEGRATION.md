@@ -69,8 +69,8 @@ hint displays. No claim of cross-device clock synchronization or automatic calib
 ## What remains
 
 - Real Margin client: event production, request acknowledgments and display timing.
-- Camera and VLM: install dependencies/model assets, exercise the adapters, measure failures,
-  latency and accuracy. Pose/hand/phone perception currently uses scripted inputs only.
+- Camera: basic face presence and camera-to-Blender motion smoke-tested; measure failures,
+  geometry and interpretation accuracy next. VLM remains untested. Pose/hand/phone perception currently uses scripted inputs only.
 - Learned state: rewards are heuristic proxies. Overlapped attempts are unscored; no causal
   efficacy or long-term personalization has been established.
 - Screen targeting currently uses configured geometry, not AprilTag localization.

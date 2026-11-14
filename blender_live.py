@@ -85,7 +85,17 @@ def _poll():
 
 
 def start(port: int = PORT) -> None:
+    previous = bpy.app.driver_namespace.get("lampkit_live_stop")
+    if previous is not None and previous is not stop:
+        previous()
     stop()
+    rig = bpy.data.scenes[SCENE].objects[RIG]
+    # Baked animation must not overwrite live bone values during depsgraph evaluation.
+    if rig.animation_data:
+        rig.animation_data.action = None
+        for track in rig.animation_data.nla_tracks:
+            track.mute = True
+    bpy.app.driver_namespace["lampkit_live_stop"] = stop
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(("127.0.0.1", port))

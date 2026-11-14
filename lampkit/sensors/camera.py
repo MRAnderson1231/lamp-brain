@@ -6,8 +6,9 @@ saved to models/face_landmarker.task.
 
 The camera pose in the desk frame comes from the profile (`camera.position`, `camera.yaw_deg`,
 `camera.pitch_deg`, `camera.hfov_deg`); face distance is estimated from the apparent
-inter-ocular width (`camera.ipd_m`). Status: written against the MediaPipe Tasks API, not yet
-exercised on this machine.
+inter-ocular width (`camera.ipd_m`). Basic capture, face landmarks and presence-driven Blender motion were exercised on a
+MacBook Pro on 2026-11-14. Head geometry, affect accuracy and fatigue detection remain
+unvalidated.
 """
 from __future__ import annotations
 

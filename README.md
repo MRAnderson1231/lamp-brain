@@ -27,7 +27,9 @@ using an ELEGNT-inspired F + γE objective. The decision/control loop does not w
 
 **Verified:** scripted scenarios, deterministic replay, TCP Margin events and returned hint
 requests, exam motion cancellation, rejection cooldown, and Blender UDP pose output format.
-**Not verified:** live camera/VLM accuracy, real iPad integration, physical motors, or learning
+**Live smoke test:** MacBook Pro camera → MediaPipe face presence → greeting/settle → Blender
+bone updates ran for 90 seconds on 2026-11-14. See [`docs/LIVE_TEST.md`](docs/LIVE_TEST.md).
+**Not verified:** camera/VLM interpretation accuracy, real iPad integration, physical motors, or learning
 benefits. The native Mac mood demo is separate; it is not yet wired to lampkit. The rendered
 behaviour videos are design references, not footage of autonomous real-world perception.
 
