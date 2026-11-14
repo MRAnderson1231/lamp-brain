@@ -1,0 +1,9 @@
+{
+  "extends": "base",
+  "name": "desk",
+  "body": {"type": "udp", "port": 9877},
+  "bridge": {"enabled": true, "port": 7788},
+  "camera": {"enabled": true},
+  "vlm": {"enabled": false},
+  "personalize": {"state_file": "~/.lampkit/personal.json"}
+}

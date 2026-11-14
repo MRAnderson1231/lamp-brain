@@ -1,0 +1,21 @@
+{
+  "about": "Margin marks answers: right, wrong, right again too soon (cooldown).",
+  "duration": 50,
+  "expect": {
+    "intents": ["hello", "celebrate", "hmm"],
+    "count": {"celebrate": 1}
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [{"from": 0, "to": 50}]},
+    {"kind": "app.pencil", "every": 2.0, "segments": [{"from": 0, "to": 50, "data": {"strokes": 3}}]}
+  ],
+  "events": [
+    {"t": 0.5, "kind": "app.session", "data": {"active": true}},
+    {"t": 15, "kind": "app.correct"},
+    {"t": 25, "kind": "app.wrong"},
+    {"t": 30, "kind": "app.correct"}
+  ]
+}

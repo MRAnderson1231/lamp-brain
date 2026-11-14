@@ -1,0 +1,40 @@
+{
+  "about": "Exam arrives during greeting; cancel the active motion immediately.",
+  "duration": 12,
+  "expect": {
+    "context": [
+      "arriving",
+      "exam"
+    ],
+    "no_motion_after": 1.1
+  },
+  "streams": [
+    {
+      "kind": "obs.face",
+      "every": 0.1,
+      "segments": [
+        {
+          "from": 0,
+          "to": 12,
+          "data": {
+            "present": true
+          }
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "t": 1.1,
+      "kind": "app.exam",
+      "data": {
+        "active": true
+      }
+    },
+    {
+      "t": 1.1,
+      "kind": "app.correct",
+      "data": {}
+    }
+  ]
+}

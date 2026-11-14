@@ -1,0 +1,24 @@
+{
+  "about": "Exam mode: a wrong answer, a phone pickup and a stuck question. The lamp may only change its light.",
+  "duration": 100,
+  "expect": {
+    "context": ["arriving", "exam"],
+    "no_motion_after": 6.0,
+    "vetoed": ["hmm"]
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [{"from": 0, "to": 60}, {"from": 60, "to": 100, "data": {"blend": {"browDown": 0.6, "eyeSquint": 0.3}}}]},
+    {"kind": "obs.phone", "every": 0.2, "base": {"docked": true, "in_hand": 0.0},
+     "segments": [{"from": 0, "to": 40}, {"from": 40, "to": 50, "data": {"docked": false, "in_hand": 0.9}}, {"from": 50, "to": 100}]},
+    {"kind": "app.pencil", "every": 2.0, "segments": [{"from": 0, "to": 60, "data": {"strokes": 2}}]}
+  ],
+  "events": [
+    {"t": 0.5, "kind": "app.session", "data": {"active": true}},
+    {"t": 2.0, "kind": "app.exam", "data": {"active": true}},
+    {"t": 30, "kind": "app.wrong"},
+    {"t": 60, "kind": "app.stuck", "data": {"conf": 0.9, "region": [0.3, 0.5, 0.3, 0.05]}}
+  ]
+}

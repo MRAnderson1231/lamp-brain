@@ -1,0 +1,1 @@
+{"extends": "desk", "name": "exp-app-only", "experiment": {"condition": "app_only"}, "personalize": {"enabled": false}}

@@ -1,0 +1,24 @@
+{
+  "units": "metres, armature space of lamp.blend at scale 1",
+  "chain": ["root", "swivel", "lower", "upper", "head"],
+  "bones": {
+    "root":   {"head": [0.0, 0.0, 0.0],   "parent": null,
+               "axes": [[0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]]},
+    "swivel": {"head": [0.0, 0.0, 0.05],  "parent": "root",
+               "axes": [[0.0, 1.0, 0.0], [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]]},
+    "lower":  {"head": [0.0, 0.0, 0.13],  "parent": "swivel",
+               "axes": [[0.0, 1.0, 0.0], [-0.529919, 0.0, 0.848048], [0.848048, 0.0, 0.529919]]},
+    "upper":  {"head": [-0.158976, 0.0, 0.384414], "parent": "lower",
+               "axes": [[0.0, 1.0, 0.0], [0.681998, 0.0, 0.731354], [0.731354, 0.0, -0.681998]]},
+    "head":   {"head": [0.038804, 0.0, 0.596507], "parent": "upper",
+               "axes": [[0.0, 1.0, 0.0], [0.992546, 0.0, 0.121869], [0.121869, 0.0, -0.992546]]}
+  },
+  "spot": {"bone": "head", "pos": [0.257164, 0.0, 0.623318], "dir": [0.992546, 0.0, 0.121869]},
+  "channels": {
+    "yaw":  {"bone": "swivel", "axis": 1, "sign": 1},
+    "low":  {"bone": "lower",  "axis": 0, "sign": 1},
+    "up":   {"bone": "upper",  "axis": 0, "sign": 1},
+    "nod":  {"bone": "head",   "axis": 0, "sign": 1},
+    "turn": {"bone": "head",   "axis": 2, "sign": -1}
+  }
+}

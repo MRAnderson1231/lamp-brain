@@ -1,0 +1,19 @@
+{
+  "about": "Picks the phone up off the dock in the middle of writing, keeps it for 25 s, puts it back.",
+  "duration": 80,
+  "expect": {
+    "study": ["phone", "engaged"],
+    "intents": ["hello", "phone_look", "phone_nag", "settle"],
+    "reflex": {"at": 20.0, "state": "phone", "within": 0.2}
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [{"from": 0, "to": 20}, {"from": 20, "to": 45, "data": {"pitch": 5}}, {"from": 45, "to": 80}]},
+    {"kind": "obs.phone", "every": 0.2, "base": {"docked": true, "in_hand": 0.0},
+     "segments": [{"from": 0, "to": 20}, {"from": 20, "to": 45, "data": {"docked": false, "in_hand": 0.9}}, {"from": 45, "to": 80}]},
+    {"kind": "app.pencil", "every": 2.0, "segments": [{"from": 0, "to": 20, "data": {"strokes": 3}}, {"from": 46, "to": 80, "data": {"strokes": 3}}]}
+  ],
+  "events": [{"t": 0.5, "kind": "app.session", "data": {"active": true}}]
+}

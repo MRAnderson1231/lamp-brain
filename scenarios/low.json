@@ -1,0 +1,23 @@
+{
+  "about": "Slumps and frowns for over a minute; FastVLM agrees they look sad. Later perks up.",
+  "duration": 150,
+  "expect": {
+    "study": ["low", "engaged"],
+    "intents": ["hello", "comfort", "settle"]
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [{"from": 0, "to": 20}, {"from": 20, "to": 100, "data": {"blend": {"mouthFrown": 0.6, "mouthSmile": 0.0}}},
+                  {"from": 100, "to": 150, "data": {"blend": {"mouthSmile": 0.4}}}]},
+    {"kind": "obs.pose", "every": 0.5, "base": {"slouch": 0.1, "hand_on_head": false},
+     "segments": [{"from": 0, "to": 20}, {"from": 20, "to": 100, "data": {"slouch": 0.7}}, {"from": 100, "to": 150}]},
+    {"kind": "obs.vlm", "every": 3.0,
+     "segments": [{"from": 0, "to": 20, "data": {"probs": {"engaged": 0.8}}},
+                  {"from": 20, "to": 100, "data": {"probs": {"sad": 0.7, "engaged": 0.1}}},
+                  {"from": 100, "to": 150, "data": {"probs": {"engaged": 0.8}}}]},
+    {"kind": "app.pencil", "every": 3.0, "segments": [{"from": 0, "to": 150, "data": {"strokes": 1}}]}
+  ],
+  "events": [{"t": 0.5, "kind": "app.session", "data": {"active": true}}]
+}

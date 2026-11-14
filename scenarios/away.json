@@ -1,0 +1,15 @@
+{
+  "about": "Leaves the desk for almost two minutes, then comes back.",
+  "duration": 180,
+  "expect": {
+    "context": ["arriving", "studying", "away", "sleep", "arriving", "studying"],
+    "intents": ["hello", "search", "sleep", "hello"]
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [{"from": 0, "to": 30}, {"from": 30, "to": 140, "data": {"present": false}}, {"from": 140, "to": 180}]}
+  ],
+  "events": [{"t": 0.5, "kind": "app.session", "data": {"active": true}}]
+}

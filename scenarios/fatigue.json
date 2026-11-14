@@ -1,0 +1,29 @@
+{
+  "about": "48 minutes into a session: eyes get heavy, two long yawns, accepts a break, comes back.",
+  "duration": 130,
+  "expect": {
+    "study": ["fatigued"],
+    "context": ["arriving", "studying", "break", "studying"],
+    "intents": ["hello", "suggest_break", "rest", "settle"]
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [
+       {"from": 0, "to": 20},
+       {"from": 20, "to": 40, "data": {"blend": {"eyeBlink": 0.6}}},
+       {"from": 40, "to": 42.5, "data": {"blend": {"eyeBlink": 0.6, "jawOpen": 0.75}}},
+       {"from": 42.5, "to": 55, "data": {"blend": {"eyeBlink": 0.6}}},
+       {"from": 55, "to": 57.5, "data": {"blend": {"eyeBlink": 0.6, "jawOpen": 0.75}}},
+       {"from": 57.5, "to": 100, "data": {"blend": {"eyeBlink": 0.6}}},
+       {"from": 100, "to": 130}
+     ]},
+    {"kind": "app.pencil", "every": 4.0, "segments": [{"from": 0, "to": 70, "data": {"strokes": 1}}, {"from": 102, "to": 130, "data": {"strokes": 3}}]}
+  ],
+  "events": [
+    {"t": 0.5, "kind": "app.session", "data": {"active": true, "elapsed_min": 48}},
+    {"t": 75, "kind": "app.break", "data": {"active": true}},
+    {"t": 100, "kind": "app.break", "data": {"active": false}}
+  ]
+}

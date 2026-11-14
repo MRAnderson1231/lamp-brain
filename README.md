@@ -18,6 +18,34 @@ webcam ──▶ lamp_brain.py (FastVLM on MLX) ──▶ emotion.txt ──▶ 
 | sad | droops, sighs, shakes its head slowly, light turns dim and cold |
 | surprised | flinches back with a flash, then settles |
 
+## lampkit: the study-companion runtime
+
+`lampkit/` is a research prototype for a proactive study companion. Margin supplies learning
+signals; optional camera/VLM adapters supply observations. A deterministic estimator, state
+machine and policy choose interventions, and a motion generator scores candidate trajectories
+using an ELEGNT-inspired F + γE objective. The decision/control loop does not wait for an LLM.
+
+**Verified:** scripted scenarios, deterministic replay, TCP Margin events and returned hint
+requests, exam motion cancellation, rejection cooldown, and Blender UDP pose output format.
+**Not verified:** live camera/VLM accuracy, real iPad integration, physical motors, or learning
+benefits. The native Mac mood demo is separate; it is not yet wired to lampkit. The rendered
+behaviour videos are design references, not footage of autonomous real-world perception.
+
+```bash
+python -m lampkit simulate scenarios/stuck.json      # stuck → frustrated → hint, printed as a timeline
+uv run --no-project --python 3.12 --with pytest pytest -q
+```
+
+To watch it drive the Blender lamp, open `design/blender/margin_lamp_behaviours.blend`, run
+`blender_live.py` inside Blender, then run
+`python -m lampkit simulate scenarios/demo.json --profile twin --realtime`.
+
+- [`docs/INTEGRATION.md`](docs/INTEGRATION.md) gives the live bridge demo, event contract and current limits.
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) covers the layers, the state machine, the policy, motion and replay.
+- [`design/`](design/README.md) has the proportions, desk renders, the eight reference behaviours (video) and their Blender scripts.
+
+![Behaviours](design/renders/behaviours-sheet-a.png)
+
 ## The Mac app
 
 ![The Mac app](app.png)

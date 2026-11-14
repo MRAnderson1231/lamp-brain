@@ -1,0 +1,170 @@
+{
+ "about": "Writes, gets stuck on a sentence, frowns, starts erasing and holding their head, gets a hint, starts writing again.",
+ "duration": 200,
+ "expect": {
+  "study": [
+   "confused",
+   "frustrated",
+   "engaged"
+  ],
+  "intents": [
+   "hello",
+   "attend",
+   "glance_hint",
+   "show_hint",
+   "settle"
+  ],
+  "requests": [
+   "show_hint"
+  ]
+ },
+ "streams": [
+  {
+   "kind": "obs.face",
+   "every": 0.1,
+   "base": {
+    "present": true,
+    "yaw": 0,
+    "pitch": 25,
+    "x": 0.36,
+    "y": -0.74,
+    "z": 0.4,
+    "blend": {
+     "browDown": 0.05,
+     "eyeSquint": 0.05,
+     "eyeBlink": 0.1,
+     "jawOpen": 0.02,
+     "mouthSmile": 0.1,
+     "mouthFrown": 0.05
+    }
+   },
+   "segments": [
+    {
+     "from": 0,
+     "to": 30
+    },
+    {
+     "from": 30,
+     "to": 105,
+     "data": {
+      "blend": {
+       "browDown": 0.55,
+       "eyeSquint": 0.3
+      }
+     }
+    },
+    {
+     "from": 105,
+     "to": 125,
+     "data": {
+      "blend": {
+       "browDown": 0.6,
+       "eyeSquint": 0.3,
+       "mouthFrown": 0.3
+      }
+     }
+    },
+    {
+     "from": 125,
+     "to": 200
+    }
+   ]
+  },
+  {
+   "kind": "obs.pose",
+   "every": 0.5,
+   "base": {
+    "slouch": 0.1,
+    "hand_on_head": false
+   },
+   "segments": [
+    {
+     "from": 0,
+     "to": 88
+    },
+    {
+     "from": 88,
+     "to": 125,
+     "data": {
+      "hand_on_head": true,
+      "slouch": 0.2
+     }
+    },
+    {
+     "from": 125,
+     "to": 200
+    }
+   ]
+  },
+  {
+   "kind": "app.pencil",
+   "every": 2.0,
+   "segments": [
+    {
+     "from": 0,
+     "to": 30,
+     "data": {
+      "strokes": 3
+     }
+    },
+    {
+     "from": 122,
+     "to": 200,
+     "data": {
+      "strokes": 4
+     }
+    }
+   ]
+  },
+  {
+   "kind": "app.pencil",
+   "every": 3.0,
+   "segments": [
+    {
+     "from": 70,
+     "to": 112,
+     "data": {
+      "strokes": 0,
+      "erases": 1
+     }
+    }
+   ]
+  },
+  {
+   "kind": "obs.phone",
+   "every": 1.0,
+   "base": {
+    "docked": true,
+    "in_hand": 0.0
+   },
+   "segments": [
+    {
+     "from": 0,
+     "to": 200
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "t": 0.5,
+   "kind": "app.session",
+   "data": {
+    "active": true
+   }
+  },
+  {
+   "t": 30,
+   "kind": "app.stuck",
+   "data": {
+    "conf": 0.8,
+    "region": [
+     0.35,
+     0.3,
+     0.25,
+     0.05
+    ]
+   }
+  }
+ ]
+}

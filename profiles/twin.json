@@ -1,0 +1,1 @@
+{"extends": "base", "name": "twin", "body": {"type": "udp", "port": 9877}}

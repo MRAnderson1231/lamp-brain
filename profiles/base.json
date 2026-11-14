@@ -1,0 +1,656 @@
+{
+  "name": "base",
+  "loop_hz": 30,
+  "log": {
+    "evidence_every": 0.5,
+    "history_limit": 2000
+  },
+  "experiment": {
+    "condition": "expressive"
+  },
+  "body": {
+    "type": "null"
+  },
+  "bridge": {
+    "enabled": false,
+    "port": 7788,
+    "host": "127.0.0.1",
+    "max_line_bytes": 16384,
+    "max_pending": 512,
+    "socket_timeout": 1.0
+  },
+  "camera": {
+    "enabled": false,
+    "index": 0,
+    "hz": 15,
+    "face_model": "models/face_landmarker.task",
+    "position": [
+      0.62,
+      -0.55,
+      0.32
+    ],
+    "yaw_deg": 130,
+    "pitch_deg": 5,
+    "hfov_deg": 70,
+    "ipd_m": 0.063
+  },
+  "vlm": {
+    "enabled": false,
+    "model": "models/FastVLM-0.5B-4bit",
+    "interval": 3.0
+  },
+  "estimate": {
+    "tau": {
+      "face": 2.0,
+      "off_task": 6.0,
+      "posture": 4.0,
+      "phone": 0.05
+    },
+    "face_timeout": 1.5,
+    "off_task_yaw": 35,
+    "off_task_pitch": -15,
+    "yawn_jaw": 0.55,
+    "yawn_seconds": 1.5,
+    "yawn_window": 600,
+    "yawn_full": 3,
+    "perclos_window": 60,
+    "perclos_full": 0.3,
+    "erase_window": 60,
+    "erase_full": 8,
+    "stuck_age_full": 90,
+    "idle_full": 45,
+    "stuck_clear_on_write": 0.3,
+    "study_full_min": 50,
+    "vlm_stale": 10,
+    "weights": {
+      "confused": {
+        "stuck": 0.45,
+        "idle": 0.15,
+        "brow": 0.25,
+        "squint": 0.1,
+        "vlm_confused": 0.3,
+        "off_task": -0.2
+      },
+      "frustrated": {
+        "stuck_age": 0.35,
+        "erase_rate": 0.25,
+        "hand_on_head": 0.25,
+        "frown": 0.1,
+        "stuck": 0.1,
+        "vlm_frustrated": 0.35
+      },
+      "bored": {
+        "off_task": 0.55,
+        "slouch": 0.2,
+        "vlm_bored": 0.35,
+        "stuck": -0.4,
+        "phone": -0.5
+      },
+      "fatigued": {
+        "perclos": 0.35,
+        "yawns": 0.35,
+        "study_time": 0.25,
+        "vlm_tired": 0.3
+      },
+      "low": {
+        "frown": 0.35,
+        "slouch": 0.2,
+        "vlm_sad": 0.45,
+        "smile": -0.3
+      },
+      "phone": {
+        "phone": 1.0
+      }
+    }
+  },
+  "fsm": {
+    "arrive_after": 1.0,
+    "hello_seconds": 4.0,
+    "away_after": 8.0,
+    "sleep_after": 45.0,
+    "break_grace": 600.0,
+    "frustration_memory": 120.0,
+    "study": {
+      "confused": {
+        "enter": 0.45,
+        "exit": 0.3,
+        "dwell": 3.0,
+        "tau": 2.0,
+        "priority": 2
+      },
+      "frustrated": {
+        "enter": 0.55,
+        "exit": 0.35,
+        "dwell": 3.0,
+        "tau": 3.0,
+        "priority": 4,
+        "strong": 0.8
+      },
+      "bored": {
+        "enter": 0.5,
+        "exit": 0.3,
+        "dwell": 10.0,
+        "tau": 5.0,
+        "priority": 1
+      },
+      "fatigued": {
+        "enter": 0.55,
+        "exit": 0.35,
+        "dwell": 5.0,
+        "tau": 5.0,
+        "priority": 3
+      },
+      "low": {
+        "enter": 0.5,
+        "exit": 0.3,
+        "dwell": 20.0,
+        "tau": 8.0,
+        "priority": 3
+      },
+      "phone": {
+        "enter": 0.6,
+        "exit": 0.3,
+        "dwell": 0.0,
+        "tau": 0.05,
+        "priority": 5
+      }
+    }
+  },
+  "policy": {
+    "ladder": [
+      "glance_hint",
+      "show_hint",
+      "voice"
+    ],
+    "ladder_step": 30,
+    "budget_per_hour": 8,
+    "phone_nag_after": 12,
+    "outcome_window": 60,
+    "exam_allowed": [
+      "phone_look",
+      "hello",
+      "search",
+      "sleep",
+      "settle",
+      "rest"
+    ],
+    "dismiss_quiet_seconds": 60
+  },
+  "personalize": {
+    "enabled": true,
+    "state_file": null,
+    "arms": {
+      "confusion_window": [
+        30,
+        60,
+        90
+      ],
+      "ladder_start": [
+        0,
+        1
+      ],
+      "gamma_mult": [
+        0.6,
+        1.0,
+        1.4
+      ]
+    },
+    "default": {
+      "confusion_window": 60,
+      "ladder_start": 0,
+      "gamma_mult": 1.0
+    }
+  },
+  "intents": {
+    "hello": {
+      "target": "user",
+      "primitives": [
+        "double_nod",
+        "bounce",
+        "brighten"
+      ],
+      "express": {
+        "emotion": 0.7,
+        "attention": 0.6
+      },
+      "light": {
+        "glow": 1.2,
+        "warmth": 0.8
+      },
+      "hold": 0.6,
+      "priority": 3,
+      "cooldown": 30
+    },
+    "settle": {
+      "target": "work",
+      "primitives": [],
+      "express": {},
+      "light": {
+        "glow": 1.0,
+        "warmth": 0.75
+      },
+      "hold": 0.2,
+      "priority": 1
+    },
+    "attend": {
+      "target": "work",
+      "primitives": [
+        "lean_in",
+        "pause"
+      ],
+      "express": {
+        "attention": 0.8
+      },
+      "light": {
+        "glow": 1.1,
+        "warmth": 0.75
+      },
+      "hold": 1.0,
+      "priority": 2,
+      "cooldown": 60,
+      "return": false
+    },
+    "glance_hint": {
+      "target": "hint",
+      "primitives": [
+        "nod",
+        "focus_light",
+        "tilt"
+      ],
+      "express": {
+        "intention": 0.7,
+        "attention": 0.6
+      },
+      "light": {
+        "glow": 1.35,
+        "warmth": 0.85
+      },
+      "hold": 2.0,
+      "priority": 3,
+      "cooldown": 45,
+      "budget": true,
+      "track": true,
+      "return": false
+    },
+    "show_hint": {
+      "target": "hint",
+      "primitives": [
+        "nod",
+        "focus_light"
+      ],
+      "express": {
+        "intention": 0.8,
+        "attention": 0.5
+      },
+      "light": {
+        "glow": 1.5,
+        "warmth": 0.85
+      },
+      "hold": 3.0,
+      "priority": 3,
+      "cooldown": 45,
+      "budget": true,
+      "track": true,
+      "return": false,
+      "app": {
+        "action": "show_hint"
+      }
+    },
+    "voice": {
+      "enabled": false,
+      "target": "user",
+      "primitives": [
+        "nod"
+      ],
+      "express": {
+        "attention": 0.6
+      },
+      "light": {},
+      "priority": 3,
+      "budget": true,
+      "track": true,
+      "app": {
+        "action": "speak_hint"
+      }
+    },
+    "phone_look": {
+      "target": "user",
+      "primitives": [
+        "pause",
+        "tilt"
+      ],
+      "express": {
+        "attention": 0.9,
+        "attitude": 0.3
+      },
+      "light": {
+        "glow": 0.75,
+        "warmth": 0.2
+      },
+      "hold": 3.0,
+      "priority": 5,
+      "cooldown": 20,
+      "track": true,
+      "return": false,
+      "restore_light": false
+    },
+    "phone_nag": {
+      "target": "user",
+      "primitives": [
+        "shake"
+      ],
+      "express": {
+        "attitude": 0.8,
+        "attention": 0.4
+      },
+      "light": {
+        "glow": 0.7,
+        "warmth": 0.15
+      },
+      "hold": 2.0,
+      "priority": 5,
+      "cooldown": 60,
+      "budget": true,
+      "return": false,
+      "restore_light": false
+    },
+    "nudge": {
+      "target": "work",
+      "primitives": [
+        "lean_in",
+        "brighten",
+        "nod"
+      ],
+      "express": {
+        "intention": 0.6,
+        "attention": 0.5
+      },
+      "light": {
+        "glow": 1.3,
+        "warmth": 0.75
+      },
+      "hold": 1.0,
+      "priority": 2,
+      "cooldown": 180,
+      "budget": true,
+      "track": true
+    },
+    "suggest_break": {
+      "target": "user",
+      "primitives": [
+        "stretch",
+        "sway"
+      ],
+      "express": {
+        "emotion": 0.6,
+        "intention": 0.6
+      },
+      "light": {
+        "glow": 0.7,
+        "warmth": 1.0
+      },
+      "hold": 2.0,
+      "priority": 3,
+      "cooldown": 900,
+      "budget": true,
+      "track": true
+    },
+    "comfort": {
+      "target": "user",
+      "posture": {
+        "low": 8,
+        "up": 4
+      },
+      "primitives": [
+        "soft_nods",
+        "breathe_light",
+        "lean_in"
+      ],
+      "express": {
+        "emotion": 0.8,
+        "attention": 0.7
+      },
+      "light": {
+        "glow": 0.7,
+        "warmth": 1.0
+      },
+      "hold": 4.0,
+      "priority": 3,
+      "cooldown": 600,
+      "budget": true,
+      "track": true
+    },
+    "celebrate": {
+      "target": "user",
+      "primitives": [
+        "double_nod",
+        "bounce",
+        "brighten"
+      ],
+      "express": {
+        "emotion": 0.8,
+        "attitude": 0.6
+      },
+      "light": {
+        "glow": 1.6,
+        "warmth": 0.95
+      },
+      "hold": 0.3,
+      "priority": 2,
+      "cooldown": 20
+    },
+    "hmm": {
+      "target": "work",
+      "primitives": [
+        "tilt",
+        "pause"
+      ],
+      "express": {
+        "attitude": 0.6,
+        "attention": 0.4
+      },
+      "light": {
+        "glow": 0.85,
+        "warmth": 0.55
+      },
+      "hold": 0.5,
+      "priority": 2,
+      "cooldown": 20,
+      "return": false
+    },
+    "search": {
+      "target": "seat",
+      "primitives": [
+        "search"
+      ],
+      "express": {
+        "attention": 0.6,
+        "intention": 0.5
+      },
+      "light": {
+        "glow": 0.9,
+        "warmth": 0.75
+      },
+      "hold": 1.0,
+      "priority": 2,
+      "return": false,
+      "restore_light": false
+    },
+    "sleep": {
+      "pose": "sleep",
+      "primitives": [],
+      "express": {},
+      "light": {
+        "glow": 0.05,
+        "warmth": 0.95
+      },
+      "hold": 0.5,
+      "priority": 1,
+      "restore_light": false
+    },
+    "rest": {
+      "pose": "relax",
+      "primitives": [],
+      "express": {},
+      "light": {
+        "glow": 0.8,
+        "warmth": 1.0
+      },
+      "hold": 0.5,
+      "priority": 1,
+      "restore_light": false
+    }
+  },
+  "kinematics": {
+    "scale": 0.55,
+    "head_scale": 0.68,
+    "limits": {
+      "yaw": [
+        -120,
+        60
+      ],
+      "low": [
+        -25,
+        30
+      ],
+      "up": [
+        -30,
+        45
+      ],
+      "nod": [
+        -50,
+        85
+      ],
+      "turn": [
+        -30,
+        30
+      ]
+    }
+  },
+  "motion": {
+    "plan_hz": 30,
+    "vmax": {
+      "yaw": 90,
+      "low": 60,
+      "up": 60,
+      "nod": 120,
+      "turn": 120
+    },
+    "min_move": 0.35,
+    "lead": 0.6,
+    "hold": 1.0,
+    "light_ramp": 0.4,
+    "v_quiet": 120,
+    "amps": [
+      0.6,
+      1.0,
+      1.4
+    ],
+    "score": {
+      "reach": 1.0,
+      "time": 0.05,
+      "effort": 0.02,
+      "noise": 0.3,
+      "exaggerate": 0.4,
+      "idle": 0.3
+    },
+    "gamma": {
+      "default": 0.3,
+      "by_state": {
+        "engaged": 0.1,
+        "confused": 0.2,
+        "frustrated": 0.3,
+        "bored": 0.4,
+        "fatigued": 0.6,
+        "low": 1.0,
+        "phone": 0.5
+      },
+      "by_intent": {
+        "settle": 0.0,
+        "sleep": 0.2,
+        "rest": 0.2,
+        "hello": 0.9,
+        "celebrate": 0.9,
+        "comfort": 1.0,
+        "attend": 0.25,
+        "hmm": 0.5
+      }
+    },
+    "posture": {
+      "low": 2,
+      "up": 0
+    },
+    "poses": {
+      "sleep": {
+        "yaw": -25,
+        "low": 6,
+        "up": 34,
+        "nod": 72
+      },
+      "relax": {
+        "yaw": -45,
+        "low": 6,
+        "up": 10,
+        "nod": 30
+      }
+    },
+    "targets": {
+      "work": [
+        0.33,
+        -0.235,
+        0.0063
+      ],
+      "seat_face": [
+        0.36,
+        -0.74,
+        0.4
+      ]
+    },
+    "screen": {
+      "center": [
+        0.34,
+        -0.24,
+        0.0063
+      ],
+      "size": [
+        0.1766,
+        0.1159
+      ],
+      "yaw_deg": -6
+    },
+    "light": {
+      "glow": 1.0,
+      "warmth": 0.75
+    },
+    "breathe": {
+      "period": 4.5,
+      "low": 0.6,
+      "up": 0.8,
+      "nod": 0.6,
+      "glow": 0.02
+    },
+    "spring": {
+      "omega": {
+        "default": 14,
+        "glow": 10,
+        "warmth": 6
+      },
+      "vmax": {
+        "default": 200,
+        "yaw": 120,
+        "glow": 4,
+        "warmth": 2,
+        "hop": 1,
+        "squash": 1
+      },
+      "amax": {
+        "default": 2000,
+        "glow": 40,
+        "warmth": 20,
+        "hop": 30,
+        "squash": 30
+      }
+    },
+    "max_step": 0.02
+  }
+}

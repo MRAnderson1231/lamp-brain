@@ -1,0 +1,10 @@
+{
+  "extends": "sim",
+  "name": "bridge-demo",
+  "bridge": {
+    "enabled": true
+  },
+  "body": {
+    "type": "null"
+  }
+}

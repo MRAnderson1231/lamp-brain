@@ -7,3 +7,11 @@ dependencies = [
     "opencv-python>=5.0.0.93",
     "pillow>=13.0.0",
 ]
+
+[project.optional-dependencies]
+# lampkit's core needs only the standard library; these are for the live sensors
+live = ["mediapipe>=0.10"]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

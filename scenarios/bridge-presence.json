@@ -1,0 +1,26 @@
+{
+  "about": "Synthetic presence ONLY for TCP integration demonstrations. Not camera perception.",
+  "duration": 120,
+  "expect": {
+    "context": [
+      "arriving",
+      "studying"
+    ]
+  },
+  "streams": [
+    {
+      "kind": "obs.face",
+      "every": 0.1,
+      "segments": [
+        {
+          "from": 0,
+          "to": 120,
+          "data": {
+            "present": true
+          }
+        }
+      ]
+    }
+  ],
+  "events": []
+}

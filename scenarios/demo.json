@@ -1,0 +1,33 @@
+{
+  "about": "Four minutes at the desk for the Blender twin: arrive, a right answer, a phone break, a stuck sentence and a hint, a wrong then right answer, leave.",
+  "duration": 250,
+  "expect": {
+    "study": ["phone", "confused", "frustrated", "engaged"],
+    "intents": ["hello", "celebrate", "phone_look", "attend", "show_hint", "hmm", "search", "sleep"]
+  },
+  "streams": [
+    {"kind": "obs.face", "every": 0.1,
+     "base": {"present": true, "yaw": 0, "pitch": 25, "x": 0.36, "y": -0.74, "z": 0.40,
+              "blend": {"browDown": 0.05, "eyeSquint": 0.05, "eyeBlink": 0.1, "jawOpen": 0.02, "mouthSmile": 0.1, "mouthFrown": 0.05}},
+     "segments": [
+       {"from": 0, "to": 25}, {"from": 25, "to": 40, "data": {"pitch": 5}}, {"from": 40, "to": 55},
+       {"from": 55, "to": 150, "data": {"blend": {"browDown": 0.55, "eyeSquint": 0.3}}},
+       {"from": 150, "to": 195}, {"from": 195, "to": 250, "data": {"present": false}}
+     ]},
+    {"kind": "obs.phone", "every": 0.2, "base": {"docked": true, "in_hand": 0.0},
+     "segments": [{"from": 0, "to": 25}, {"from": 25, "to": 40, "data": {"docked": false, "in_hand": 0.9}}, {"from": 40, "to": 250}]},
+    {"kind": "obs.pose", "every": 0.5, "base": {"slouch": 0.1, "hand_on_head": false},
+     "segments": [{"from": 0, "to": 95}, {"from": 95, "to": 150, "data": {"hand_on_head": true}}, {"from": 150, "to": 250}]},
+    {"kind": "app.pencil", "every": 2.0,
+     "segments": [{"from": 0, "to": 25, "data": {"strokes": 3}}, {"from": 41, "to": 55, "data": {"strokes": 3}},
+                  {"from": 152, "to": 195, "data": {"strokes": 3}}]},
+    {"kind": "app.pencil", "every": 3.0, "segments": [{"from": 85, "to": 140, "data": {"strokes": 0, "erases": 1}}]}
+  ],
+  "events": [
+    {"t": 0.5, "kind": "app.session", "data": {"active": true}},
+    {"t": 12, "kind": "app.correct"},
+    {"t": 55, "kind": "app.stuck", "data": {"conf": 0.8, "region": [0.35, 0.30, 0.25, 0.05]}},
+    {"t": 165, "kind": "app.wrong"},
+    {"t": 180, "kind": "app.correct"}
+  ]
+}

@@ -1,0 +1,1 @@
+{"extends": "desk", "name": "exp-static", "experiment": {"condition": "static"}, "personalize": {"enabled": false}}
