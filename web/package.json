@@ -1,0 +1,9 @@
+{
+  "name": "margin-lamp-lab",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {"dev": "vite --host 127.0.0.1", "build": "vite build"},
+  "dependencies": {"react": "^19.0.0", "react-dom": "^19.0.0", "three": "^0.182.0"},
+  "devDependencies": {"vite": "^7.0.0"}
+}

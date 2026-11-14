@@ -49,6 +49,7 @@ class ScriptedSensor(ReplaySensor):
     def __init__(self, path: str | Path):
         spec = json.loads(Path(path).read_text())
         self.name = Path(path).stem
+        self.profile = spec.get('profile', 'sim')
         self.duration = float(spec["duration"])
         self.expect = spec.get("expect", {})
         evs: list[Event] = []

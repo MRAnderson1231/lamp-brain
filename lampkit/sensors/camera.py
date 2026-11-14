@@ -17,7 +17,7 @@ import threading
 import time
 from pathlib import Path
 
-from ..types import OBS_FACE, Event
+from ..types import OBS_FACE, OBS_AMBIENT, Event
 
 BLENDS = {"browDown": ("browDownLeft", "browDownRight"), "eyeSquint": ("eyeSquintLeft", "eyeSquintRight"),
           "eyeBlink": ("eyeBlinkLeft", "eyeBlinkRight"), "jawOpen": ("jawOpen",),
@@ -46,6 +46,7 @@ class CameraSensor:
         self.out: list[Event] = []
         self.lock = threading.Lock()
         self.running = True
+        self.next_brightness = 0.0
         self.thread = threading.Thread(target=self._loop, daemon=True)
         self.thread.start()
 
@@ -59,6 +60,11 @@ class CameraSensor:
                 with self.lock:
                     self.latest_frame = frame
                     self.out.append(ev)
+                    if self.c.get('measure_brightness') and ev.t >= self.next_brightness:
+                        gray=self.cv2.cvtColor(frame,self.cv2.COLOR_BGR2GRAY)
+                        self.out.append(Event(ev.t,OBS_AMBIENT,{'measurement':'relative_image','calibrated':False,
+                                         'brightness':round(float(gray.mean())/255,4)},'camera'))
+                        self.next_brightness=ev.t+1/self.c['brightness_hz']
             time.sleep(max(0.0, period - (time.monotonic() - t0)))
 
     def _process(self, frame) -> Event:

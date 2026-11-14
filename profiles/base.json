@@ -32,7 +32,9 @@
     "yaw_deg": 130,
     "pitch_deg": 5,
     "hfov_deg": 70,
-    "ipd_m": 0.063
+    "ipd_m": 0.063,
+    "measure_brightness": false,
+    "brightness_hz": 1
   },
   "vlm": {
     "enabled": false,
@@ -499,6 +501,40 @@
       "hold": 0.5,
       "priority": 1,
       "restore_light": false
+    },
+    "care_check": {
+      "target": "user",
+      "primitives": [
+        "lean_in",
+        "soft_nods",
+        "pause"
+      ],
+      "express": {
+        "attention": 0.8,
+        "intention": 0.4
+      },
+      "hold": 1.0,
+      "priority": 2,
+      "cooldown": 180,
+      "budget": true,
+      "return": true,
+      "light": {}
+    },
+    "stretch_reminder": {
+      "target": "user",
+      "primitives": [
+        "stretch",
+        "nod"
+      ],
+      "express": {
+        "intention": 0.7,
+        "attention": 0.5
+      },
+      "hold": 1.5,
+      "priority": 2,
+      "cooldown": 900,
+      "budget": true,
+      "light": {}
     }
   },
   "kinematics": {
@@ -652,5 +688,209 @@
       }
     },
     "max_step": 0.02
+  },
+  "lab": {
+    "port": 8765,
+    "max_seconds": 600,
+    "idle_timeout": 20,
+    "stop_timeout": 5,
+    "max_pending": 128,
+    "history_limit": 60,
+    "preview_width": 960,
+    "preview_hz": 5,
+    "jpeg_quality": 80,
+    "max_request_bytes": 4096
+  },
+  "control": {
+    "enabled": false,
+    "log_every": 0.5,
+    "fusion": {
+      "default_ttl": 3.0,
+      "ttl": {
+        "obs.face": 1.5,
+        "obs.hand": 0.35,
+        "obs.ambient": 2.0,
+        "obs.phone": 2.0,
+        "obs.pose": 2.0,
+        "obs.vlm": 6.0,
+        "app.stuck": 30.0,
+        "app.pencil": 60.0,
+        "obs.occupancy": 1.5,
+        "obs.work_target": 0.75,
+        "obs.judgment": 3,
+        "obs.clock": 120
+      },
+      "min_quality": 0.6,
+      "future_tolerance": 0.1,
+      "max_id_length": 128,
+      "dedup_limit": 2048,
+      "max_lux": 200000,
+      "task_scoped": [
+        "app.stuck",
+        "app.pencil",
+        "app.correct",
+        "app.wrong",
+        "app.hint_feedback"
+      ],
+      "max_glow": 1.5,
+      "kelvin_range": [
+        2200,
+        6500
+      ],
+      "quiet_seconds": 60,
+      "manual_light_seconds": 120,
+      "sensor_queue_limit": 256
+    },
+    "gestures": {
+      "engage_seconds": 0.3,
+      "table_up_axis": [
+        0,
+        1,
+        0
+      ],
+      "swipe_metres": 0.04,
+      "swipe_cooldown": 0.35,
+      "brightness_step": 0.1,
+      "max_distance": 0.6,
+      "minimum_tracking_distance": 0.02,
+      "yield_distance": 0.16,
+      "yield_gain": 0.5,
+      "follow_gain": 0.8,
+      "command_step_m": 0.03,
+      "command_axes": {
+        "beckon": [
+          0,
+          -1,
+          0
+        ],
+        "away": [
+          0,
+          1,
+          0
+        ],
+        "raise": [
+          0,
+          0,
+          1
+        ],
+        "lower": [
+          0,
+          0,
+          -1
+        ]
+      }
+    },
+    "lighting": {
+      "initial_glow": 1.0,
+      "initial_kelvin": 3500,
+      "max_step": 0.1,
+      "target_lux": 400,
+      "deadband_lux": 25,
+      "off_margin_lux": 200,
+      "off_delay": 10,
+      "sensor_tau": 1.5,
+      "kp": 0.0005,
+      "ki": 0.0003,
+      "max_glow": 1.5,
+      "glow_per_second": 0.3,
+      "kelvin_per_second": 100,
+      "day_hours": [
+        7,
+        20
+      ],
+      "day_kelvin": 4000,
+      "night_kelvin": 2700,
+      "kelvin_range": [
+        2200,
+        6500
+      ]
+    },
+    "tracking": {
+      "hz": 10,
+      "workspace_min": [
+        -0.45,
+        -0.5,
+        0.08
+      ],
+      "workspace_max": [
+        0.5,
+        0.45,
+        0.6
+      ],
+      "posture_weight": 1e-08,
+      "search_step_deg": 8,
+      "iterations": 32,
+      "channels": [
+        "yaw",
+        "low",
+        "up",
+        "nod"
+      ],
+      "cost_epsilon": 1e-12,
+      "step_decay": 0.5,
+      "minimum_step_deg": 0.1,
+      "tolerance_m": 0.025
+    },
+    "arbiter": {
+      "nonstudy_intents": [
+        "hello",
+        "sleep",
+        "rest"
+      ],
+      "quiet_allowed": [
+        "sleep",
+        "rest"
+      ],
+      "hint_offer_ttl": 30
+    },
+    "companion": {
+      "enabled": false,
+      "max_evidence_step": 0.1,
+      "arrive_after": 1.0,
+      "off_after": 30,
+      "absence_reset_after": 20,
+      "sensor_timeout": 60,
+      "standing_reset_after": 10,
+      "seated_after": 2700,
+      "desk_after": 3000,
+      "allow_desk_proxy": true,
+      "eye_closed": 0.75,
+      "jaw_open": 0.65,
+      "closed_dwell": 1.4,
+      "yawn_dwell": 1.8,
+      "interruptible_threshold": 0.8,
+      "judgment_cue_threshold": 0.6
+    },
+    "attention": {
+      "hz": 8,
+      "deadband_m": 0.025,
+      "target_min": [
+        -1.5,
+        -2,
+        0
+      ],
+      "target_max": [
+        1.5,
+        1.5,
+        1.8
+      ]
+    }
+  },
+  "decision": {
+    "enabled": false,
+    "provider": "jev",
+    "model": "jev-latest",
+    "key_env": "TYPESAFE_API_KEY",
+    "interval_seconds": 2,
+    "timeout_seconds": 2,
+    "max_response_bytes": 65536,
+    "questions": {
+      "fatigue_cues": "Does the supplied observation history support sustained eye closure or mouth opening? These are visible cues, not a diagnosis or a claim about emotions.",
+      "interruptible": "Is a brief optional lamp check-in compatible with the observed state? Answer no when manual control or do-not-disturb is active. Unknown context is not permission."
+    }
+  },
+  "local_context": {
+    "enabled": false,
+    "interval_seconds": 60
   }
 }

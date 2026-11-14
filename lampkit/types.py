@@ -16,6 +16,12 @@ OBS_FACE = "obs.face"          # {present, yaw, pitch, x, y, z, blend:{browDown,
 OBS_POSE = "obs.pose"          # {slouch 0..1, hand_on_head bool}
 OBS_PHONE = "obs.phone"        # {docked bool, in_hand 0..1}
 OBS_VLM = "obs.vlm"            # {probs:{engaged, confused, frustrated, bored, tired, sad}}
+OBS_AMBIENT = "obs.ambient"    # calibrated workplane_total lux OR relative_image brightness; never interchange
+OBS_HAND = "obs.hand"          # desk_m position, zone(table/head/none), engaged, quality, observed_at
+OBS_OCCUPANCY = "obs.occupancy"  # {present, posture:seated/standing/unknown}; requires a real posture source
+OBS_WORK_TARGET = "obs.work_target"  # calibrated desk_m position; not an app message
+OBS_JUDGMENT = "obs.judgment"  # bounded cue probabilities, model/evidence_id/observed_at; no actions
+OBS_CLOCK = "obs.clock"        # recorded local_hour; no implicit wall time in the core
 APP = "app."                   # prefix for Margin events, see APP_* below
 USER_PAT = "user.pat"          # the user tapped the shade: "not now"
 
@@ -26,6 +32,10 @@ APP_STUCK = "app.stuck"        # {conf 0..1, region [x, y, w, h] in screen 0..1}
 APP_WRONG = "app.wrong"
 APP_CORRECT = "app.correct"
 APP_BREAK = "app.break"        # {active bool}  the user accepted a break
+APP_TASK = "app.task"          # {task_id}; task-scoped messages must carry the same id
+APP_CONTEXT = "app.context"    # {local_hour}; explicit local context for deterministic color scheduling
+USER_STUDY_INTENT = "user.study_intent"  # {value:ready/not_now}; distinct from evaluation-only lab.annotation
+USER_LIGHT = "user.light"      # {glow?,kelvin?,auto?}; explicit manual override
 
 INPUT_PREFIXES = ("obs.", "app.", "user.")
 

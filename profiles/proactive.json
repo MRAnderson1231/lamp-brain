@@ -1,0 +1,7 @@
+{
+  "extends": "desk",
+  "name": "proactive",
+  "control": {"enabled": true},
+  "camera": {"measure_brightness": true},
+  "personalize": {"enabled": false, "state_file": null}
+}

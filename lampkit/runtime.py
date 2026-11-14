@@ -46,12 +46,20 @@ class Runtime:
         start = dict(cfg["motion"]["poses"]["sleep"], turn=0.0)
         start.update(glow=cfg["intents"]["sleep"]["light"]["glow"], warmth=cfg["intents"]["sleep"]["light"]["warmth"])
         self.player = Player(cfg, start)
+        self.control = None
+        if cfg.get("control", {}).get("enabled", False):
+            from .control import ControlStack
+            self.control = ControlStack(cfg, self.rig)
+            self.bus.intercept(INTERVENE, self.control.guard, "control_priority")
+            self.bus.intercept(APP_REQUEST, self.control.request_guard, "control_request_priority")
         self.condition = cfg.get("experiment", {}).get("condition", "expressive")
         self.last_t: float | None = None
         self.next_evidence = 0.0
 
-        self.bus.on("obs.", self.est.observe)
+        self.bus.on("obs.", self._on_obs)
         self.bus.on("app.", self._on_app)
+        if self.control:
+            self.bus.on("user.", lambda ev: self.control.observe(ev, self.last_t if self.last_t is not None else ev.t, self.bus.emit))
         self.bus.on(USER_PAT, self.est.observe)
         self.bus.on(USER_PAT, self.policy.on_event)
         self.bus.on(STATE_ENTER, self.policy.on_event)
@@ -64,9 +72,21 @@ class Runtime:
                                                        "config": copy.deepcopy(cfg), "posterior": copy.deepcopy(self.pz.post)}, "runtime"))
 
     # ---- listeners ---------------------------------------------------------------------------
+    def _on_obs(self, ev: Event) -> None:
+        if self.control and not self.control.observe(ev, self.last_t if self.last_t is not None else ev.t, self.bus.emit):
+            return
+        self.est.observe(ev)
+
     def _on_app(self, ev: Event) -> None:
+        if self.control:
+            if not self.control.observe(ev, self.last_t if self.last_t is not None else ev.t, self.bus.emit):
+                return
+            if self.control.world.task_changed:
+                self.control.reset_task(ev.t, self.est, self.fsm, self.policy, self.bus.emit)
         was_exam = self.est.exam
         self.est.observe(ev)
+        if self.control and ev.kind == 'app.hint_feedback':
+            self.control.hint_feedback(ev, self.bus.emit)
         if self.est.exam and not was_exam:
             self.player.freeze()
         if ev.kind in (APP_CORRECT, APP_WRONG) and self.fsm.context in (CTX_STUDYING, CTX_EXAM):
@@ -74,6 +94,10 @@ class Runtime:
 
     def world(self) -> dict:
         w = {"face": self.est.face_pos}
+        if self.control:
+            target = self.control.world.fresh('obs.work_target', self.last_t or 0)
+            if target:
+                w['work'] = target.data['position']
         r = self.est.stuck_region
         if r and self.est.stuck_conf > 0.1:
             w["hint"] = self.screen_point(r[0] + r[2] / 2, r[1] + r[3] / 2)
@@ -115,6 +139,17 @@ class Runtime:
             incoming += self.bridge.poll(t)
         for ev in sorted(incoming, key=lambda e: e.t):
             self.bus.emit(ev)
+        if self.control:
+            self.control.prepare(t, self.player, self.est, self.fsm, self.policy, self.bus.emit)
+            face = self.control.world.fresh('obs.face', t)
+            if face and face.data.get('present'):
+                for sensor in self.sensors:
+                    if hasattr(sensor, 'submit_world'):
+                        sensor.submit_world(t, {'observed_at':face.observed,
+                            'face_cues':face.data.get('blend', {}),
+                            'service':self.control.companion.snapshot(),
+                            'manual_control':self.control.manual['active'],
+                            'do_not_disturb':t < self.control.world.quiet_until})
         evidence, why, feats = self.est.evidence(t)
         self.fsm.tick(t, evidence, why, feats, self.est.exam, self.est.on_break)
         self.policy.tick(t)
@@ -123,7 +158,11 @@ class Runtime:
             self.bus.emit(Event(t, EVIDENCE, {k: round(v, 3) for k, v in evidence.items()}, "estimate"))
         self.player.breathing = self.condition == "expressive" and not self.est.exam and self.fsm.context != CTX_EXAM
         if self.condition != "app_only" and dt > 0:
-            self.body.apply(t, self.player.step(t, dt, freeze_motion=self.est.exam or self.fsm.context == CTX_EXAM or self.condition == "static"))
+            if self.control:
+                pose = self.control.output(t, dt, self.player, self.condition, self.bus.emit)
+            else:
+                pose = self.player.step(t, dt, freeze_motion=self.est.exam or self.fsm.context == CTX_EXAM or self.condition == "static")
+            self.body.apply(t, pose)
 
     def simulate(self, until: float, dt: float = 0.05, realtime: bool = False) -> None:
         assert isinstance(self.clock, ManualClock)

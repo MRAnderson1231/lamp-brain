@@ -62,6 +62,8 @@ class Generator:
 
     # ---- targets ----------------------------------------------------------------------------
     def target_point(self, name: str, world: dict):
+        if name == 'work' and world.get('work'):
+            return tuple(world['work'])
         if name == "user":
             return tuple(world.get("face") or self.m["targets"]["seat_face"])
         if name == "hint":

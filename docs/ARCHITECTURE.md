@@ -1,5 +1,12 @@
 # lampkit architecture
 
+Current default: standalone `companion`; see [COMPANION.md](COMPANION.md).
+The study/Margin pipeline below remains optional.
+
+The opt-in `proactive` profile adds world fusion, hand-control arbitration, independent
+illumination, and continuous head-position IK. See [PROACTIVE_V2.md](PROACTIVE_V2.md)
+for the current V2 architecture and sensor contracts. `desk` retains the baseline below.
+
 lampkit is the brain of the Margin desk lamp. It fuses two sources: what Margin (the iPad
 app) knows about the work, and what the lamp's own camera sees of the person. It then decides
 when to step in and moves the lamp expressively. The runtime is designed for local execution; live sensors and physical hardware remain unvalidated. No language
@@ -80,7 +87,7 @@ reward updates a Beta posterior per (state, arm), where an arm is `confusion_win
 `ladder_start` × `gamma_mult`. The next choice is Thompson sampling over those posteriors.
 This is how the lamp learns, per person, how patient and how expressive to be.
 
-## Motion: F + γE (ELEGNT)
+## Motion: F + γE (ELEGNT-inspired approximation)
 
 Following Hu et al., *ELEGNT* (Apple, arXiv 2501.12493), each candidate trajectory gets a score:
 
@@ -96,8 +103,17 @@ look-at IK built on the rig exported from Blender (`motion/rig.json`). Moves fol
 profiles. The `Player` runs critically damped springs with velocity and acceleration limits,
 plus a breathing layer when idle. Planning takes 4–18 ms.
 
-The paper found that expression helps in social moments and hurts in purely functional ones.
-That is why γ is low for `settle` and `attend` and high for `hello`, `celebrate` and `comfort`.
+The paper reports stronger preference for expression in social scenarios, with mixed
+preferences and potential interference in function-oriented scenarios. It does not establish
+that expression universally harms functional tasks. We therefore choose low γ for `settle`
+and `attend`, and high γ for `hello`, `celebrate` and `comfort` as a design hypothesis.
+
+This code is our finite candidate search, not Apple's released solver or a trained motion
+policy. Primitive keyframes, allowed combinations, expressive tags and weights are authored.
+Targets, inverse kinematics, interpolation, candidate selection and spring playback are
+computed. The score is a hand-designed proxy for perceived expression, not a validated human
+preference model. There is no obstacle-aware continuous replanning yet. Hop/squash are visual
+simulation channels, not commands validated on physical hardware.
 
 ## Replay
 

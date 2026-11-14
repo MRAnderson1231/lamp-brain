@@ -23,6 +23,7 @@ ALLOWED = {
     "sensors": {"types", "infra", "sensors"},
     "bodies": {"types"},
     "bridge": {"types"},
+    "control": {"control", "types", "motion"},
 }
 
 

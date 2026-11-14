@@ -9,3 +9,5 @@ logs/
 .pytest_cache/
 
 .venv-live/
+web/node_modules/
+web/dist/

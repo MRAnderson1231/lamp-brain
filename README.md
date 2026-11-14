@@ -1,8 +1,28 @@
 # Lamp Brain
 
-A desk lamp in Blender that mirrors your mood. A webcam frame goes to Apple's
-FastVLM running locally through MLX, the model names your expression, and the
-lamp plays the matching animation. Nothing leaves the Mac.
+The current focus is an **independent proactive desk lamp**. The default lab profile is
+`companion`: presence starts service, sustained absence turns off the light, sustained
+visible tiredness cues and long desk sessions can prompt a gentle check-in, and continuous
+orientation follows a face estimate or a calibrated work target. Margin integration is
+parked in the separate `proactive` profile. See [current scope and implementation](docs/COMPANION.md).
+
+MediaPipe Face Landmarker supplies the live face path. The new companion behavior has been
+checked with synthetic events and exact replay; no new human trials were run for it.
+FastVLM and the optional **Jev** typed-judgment adapter are disabled by default. Jev is
+TypeSafe's model, not JEPA. Real hand/posture/work-target detection, calibrated lux hardware,
+and physical motors are still pending. The controllers and sensor contracts exist; this
+is not a claim that those detectors already work.
+
+`./lab_test.sh` serves the local lamp/camera console at http://127.0.0.1:8765.
+The camera starts only on a button click. See [setup](docs/LIVE_TEST.md) and
+[V2 integration contracts](docs/PROACTIVE_V2.md). After frontend changes, run
+`cd web && npm run build` before starting the lab.
+
+## Earlier FastVLM mood-mirror demo (separate from lampkit)
+
+The older `lamp_brain.py` experiment sends frames to FastVLM through MLX and maps named
+expressions to animations via `lamp_controller.py`. The mapping below describes that demo;
+it is not the current lab's perception or motion-generation path, or an accuracy claim.
 
 ![Lamp poses](preview.png)
 
@@ -20,7 +40,7 @@ webcam ──▶ lamp_brain.py (FastVLM on MLX) ──▶ emotion.txt ──▶ 
 
 ## lampkit: the study-companion runtime
 
-`lampkit/` is a research prototype for a proactive study companion. Margin supplies learning
+`lampkit/` also retains the earlier study-companion profile. There, Margin supplies learning
 signals; optional camera/VLM adapters supply observations. A deterministic estimator, state
 machine and policy choose interventions, and a motion generator scores candidate trajectories
 using an ELEGNT-inspired F + γE objective. The decision/control loop does not wait for an LLM.

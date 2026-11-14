@@ -1,0 +1,154 @@
+{
+  "about": "V2 contract exercise, simulated inputs only: task-scoped messages, table brightness, exam override and stale hand release.",
+  "duration": 24,
+  "expect": {
+    "intents": [
+      "hello",
+      "celebrate"
+    ],
+    "context": [
+      "arriving",
+      "studying",
+      "exam"
+    ]
+  },
+  "streams": [
+    {
+      "kind": "obs.face",
+      "every": 0.1,
+      "base": {
+        "present": true,
+        "yaw": 0,
+        "pitch": 25,
+        "x": 0.36,
+        "y": -0.74,
+        "z": 0.4
+      },
+      "segments": [
+        {
+          "from": 0,
+          "to": 24
+        }
+      ]
+    },
+    {
+      "kind": "obs.ambient",
+      "every": 0.5,
+      "base": {
+        "measurement": "workplane_total",
+        "calibrated": true,
+        "lux": 800
+      },
+      "segments": [
+        {
+          "from": 0,
+          "to": 24
+        }
+      ]
+    },
+    {
+      "kind": "obs.hand",
+      "every": 0.1,
+      "base": {
+        "zone": "table",
+        "engaged": true,
+        "calibrated": true,
+        "frame": "desk_m",
+        "quality": 0.9,
+        "hand_id": "test"
+      },
+      "segments": [
+        {
+          "from": 9,
+          "to": 10,
+          "data": {
+            "position": [
+              0.1,
+              0.1,
+              0.02
+            ]
+          }
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "data": {
+            "position": [
+              0.1,
+              0.2,
+              0.02
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "t": 2,
+      "kind": "app.session",
+      "data": {
+        "active": true
+      }
+    },
+    {
+      "t": 3,
+      "kind": "app.task",
+      "data": {
+        "task_id": "q1"
+      }
+    },
+    {
+      "t": 4,
+      "kind": "app.pencil",
+      "data": {
+        "strokes": 1,
+        "task_id": "q1"
+      }
+    },
+    {
+      "t": 7,
+      "kind": "app.correct",
+      "data": {
+        "task_id": "q1"
+      }
+    },
+    {
+      "t": 12,
+      "kind": "app.task",
+      "data": {
+        "task_id": "q2"
+      }
+    },
+    {
+      "t": 12.1,
+      "kind": "app.stuck",
+      "data": {
+        "conf": 1,
+        "task_id": "q1"
+      }
+    },
+    {
+      "t": 15,
+      "kind": "app.exam",
+      "data": {
+        "active": true
+      }
+    },
+    {
+      "t": 16,
+      "kind": "app.correct",
+      "data": {
+        "task_id": "q2"
+      }
+    },
+    {
+      "t": 20,
+      "kind": "app.exam",
+      "data": {
+        "active": false
+      }
+    }
+  ],
+  "profile": "proactive"
+}

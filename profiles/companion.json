@@ -1,0 +1,27 @@
+{
+  "extends": "proactive",
+  "name": "companion",
+  "bridge": {
+    "enabled": false
+  },
+  "control": {
+    "companion": {
+      "enabled": true
+    }
+  },
+  "intents": {
+    "hello": {
+      "primitives": [
+        "nod",
+        "tilt"
+      ],
+      "express": {
+        "attention": 0.6,
+        "emotion": 0.25
+      }
+    }
+  },
+  "local_context": {
+    "enabled": true
+  }
+}

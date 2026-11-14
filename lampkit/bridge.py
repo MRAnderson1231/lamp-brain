@@ -13,7 +13,8 @@ import time
 from .types import Event
 
 APP_KINDS = {"app.session", "app.exam", "app.break", "app.pencil", "app.stuck",
-             "app.correct", "app.wrong", "user.pat"}
+             "app.correct", "app.wrong", "user.pat", "app.task", "app.context",
+             "user.study_intent", "user.light", "app.hint_feedback"}
 
 
 def validate_message(msg: object) -> tuple[str, dict]:
@@ -29,6 +30,25 @@ def validate_message(msg: object) -> tuple[str, dict]:
             raise ValueError("active must be a boolean")
     if "elapsed_min" in data and not number(data["elapsed_min"]):
         raise ValueError("elapsed_min must be finite and nonnegative")
+    if 'task_id' in data and (not isinstance(data['task_id'],str) or not 0<len(data['task_id'])<=128):
+        raise ValueError('task_id must be a short nonempty string')
+    if kind == 'app.task' and 'task_id' not in data:
+        raise ValueError('task_id is required')
+    if kind == 'app.context' and not number(data.get('local_hour'),0,24):
+        raise ValueError('local_hour must be in [0,24]')
+    if kind == 'app.hint_feedback' and (type(data.get('accepted')) is not bool or type(data.get('intervention')) is not int):
+        raise ValueError('hint feedback requires accepted and intervention id')
+    if kind == 'user.study_intent' and data.get('value') not in ('ready','not_now'):
+        raise ValueError('study intent must be ready or not_now')
+    if kind == 'user.light':
+        if not data or not set(data).issubset({'auto','glow','kelvin'}):
+            raise ValueError('unknown light command')
+        if 'auto' in data and type(data['auto']) is not bool:
+            raise ValueError('auto must be boolean')
+        if 'glow' in data and not number(data['glow']):
+            raise ValueError('brightness must be nonnegative and finite')
+        if 'kelvin' in data and not number(data['kelvin']):
+            raise ValueError('kelvin must be nonnegative and finite')
     if kind == "app.pencil":
         if any(type(data.get(k, 0)) is not int or data.get(k, 0) < 0 for k in ("strokes", "erases")):
             raise ValueError("pencil counts must be nonnegative integers")

@@ -1,0 +1,77 @@
+{
+  "about": "Standalone architecture exercise with synthetic observations only; no Margin messages.",
+  "duration": 60,
+  "expect": {
+    "intents": [
+      "hello",
+      "care_check",
+      "sleep"
+    ]
+  },
+  "streams": [
+    {
+      "kind": "obs.face",
+      "every": 0.1,
+      "base": {
+        "present": true,
+        "x": 0.36,
+        "y": -0.74,
+        "z": 0.4,
+        "blend": {
+          "eyeBlink": 0,
+          "jawOpen": 0
+        }
+      },
+      "segments": [
+        {
+          "from": 0,
+          "to": 8
+        },
+        {
+          "from": 8,
+          "to": 12,
+          "data": {
+            "blend": {
+              "jawOpen": 0.9
+            }
+          }
+        },
+        {
+          "from": 12,
+          "to": 15
+        },
+        {
+          "from": 15,
+          "to": 50,
+          "data": {
+            "present": false
+          }
+        },
+        {
+          "from": 50,
+          "to": 60
+        }
+      ]
+    },
+    {
+      "kind": "obs.work_target",
+      "every": 0.2,
+      "base": {
+        "frame": "desk_m",
+        "calibrated": true,
+        "position": [
+          0.2,
+          -0.3,
+          0.05
+        ]
+      },
+      "segments": [
+        {
+          "from": 4,
+          "to": 7
+        }
+      ]
+    }
+  ],
+  "profile": "companion"
+}

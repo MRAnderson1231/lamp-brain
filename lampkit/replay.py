@@ -8,7 +8,8 @@ from .runtime import Runtime
 from .sensors import ReplaySensor
 from .types import Event
 
-CHECKED = {"state.enter", "intervene", "lamp.request", "veto", "outcome", "params", "motion.plan", "budget", "outcome.unscored"}
+CHECKED = {"state.enter", "intervene", "lamp.request", "veto", "outcome", "params", "motion.plan", "budget", "outcome.unscored",
+           "control.rejected", "control.mode", "control.state"}
 
 def decisions(events: list[Event]) -> list[tuple]:
     out = []

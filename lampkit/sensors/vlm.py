@@ -2,8 +2,9 @@
 
 Instead of letting the model write a sentence and parsing it (what lamp_brain.py does), we
 score fixed options: one forward pass over the prompt, then compare the log-probabilities of
-each option's first token. Deterministic, no parsing, and the softmax over options doubles as
-a confidence. If the installed mlx-vlm does not expose what we need, it falls back to
+each option's first token. The softmax is only a relative score over forced options, NOT a
+calibrated probability of a person's emotional state. First-token scoring can be biased by
+tokenization and must be validated before use. If mlx-vlm does not expose what we need, it falls back to
 generation + keyword matching.
 
 FastVLM's weights are licensed for research only; swap `vlm.model` for an Apache-licensed

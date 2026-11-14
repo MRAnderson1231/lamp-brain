@@ -77,8 +77,10 @@ class Player:
         for spring in self.springs.values():
             spring.v = 0.0
 
-    def step(self, t: float, dt: float, freeze_motion: bool = False) -> dict:
-        tgt = self.target(t)
+    def step(self, t: float, dt: float, freeze_motion: bool = False, target_override: dict | None = None) -> dict:
+        tgt = dict(self.target(t))
+        if target_override:
+            tgt.update(target_override)
         # Substep long/jittery live ticks so the explicit spring stays stable.
         n = max(1, math.ceil(dt / self.m["max_step"]))
         for _ in range(n):

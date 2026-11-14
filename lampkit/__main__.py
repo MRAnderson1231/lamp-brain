@@ -71,7 +71,7 @@ def main(argv=None) -> int:
 
     p = sub.add_parser("simulate", help="run a scenario file through the whole pipeline")
     p.add_argument("scenario")
-    common(p, "sim")
+    common(p, None)
     p.add_argument("--dt", type=float, default=0.05)
     p.add_argument("--log", help="write the event log here")
     p.add_argument("--realtime", action="store_true", help="tick at wall-clock speed (for the Blender twin)")
@@ -119,6 +119,7 @@ def main(argv=None) -> int:
         from .runtime import Runtime
         from .sensors import ScriptedSensor
         sc = ScriptedSensor(a.scenario)
+        cfg = load_profile(a.profile or sc.profile, a.set)
         rt = Runtime(cfg, ManualClock(0.0), [sc], log_path=a.log, seed=a.seed)
         if a.realtime:
             rt.bus.on("", lambda ev: ev.kind in SHOW and fmt(ev) and print("%7.2fs  %s" % (ev.t, fmt(ev)), flush=True))
@@ -145,6 +146,12 @@ def main(argv=None) -> int:
         from .runtime import Runtime
         clock = Clock()
         sensors = []
+        if cfg['local_context']['enabled']:
+            from .sensors.local_context import LocalContextSensor
+            sensors.append(LocalContextSensor(cfg))
+        if cfg['decision']['enabled']:
+            from .sensors.decision import DecisionSensor, JevProvider
+            sensors.append(DecisionSensor(cfg, JevProvider(cfg)))
         if a.scenario:
             from .sensors import ScriptedSensor
             sc = ScriptedSensor(a.scenario)
